@@ -1,0 +1,19 @@
+diff --git a/src/asmjit/core/virtmem.cpp b/src/asmjit/core/virtmem.cpp
+index b6ce0a5..0c6f9c0 100644
+--- a/src/asmjit/core/virtmem.cpp
++++ b/src/asmjit/core/virtmem.cpp
+@@ -1103,7 +1103,13 @@ void flushInstructionCache(void* p, size_t size) noexcept {
+ #if ASMJIT_ARCH_X86 || defined(__EMSCRIPTEN__)
+   // X86/X86_64 architecture doesn't require to do anything to flush instruction cache.
+   DebugUtils::unused(p, size);
+-#elif defined(__APPLE__)
++#elif defined(__APPLE__) && defined(TARGET_OS_VISION) && TARGET_OS_VISION
++  // visionOS simulator does not expose sys_icache_invalidate the same way as
++  // macOS/iOS device builds, but Clang's builtin cache flush works.
++  char* start = static_cast<char*>(p);
++  char* end = start + size;
++  __builtin___clear_cache(start, end);
++#elif defined(__APPLE__)
+   sys_icache_invalidate(p, size);
+ #elif defined(_WIN32)
+   // Windows has a built-in support in `kernel32.dll`.

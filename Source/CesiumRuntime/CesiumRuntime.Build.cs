@@ -55,7 +55,9 @@ public class CesiumRuntime : ModuleRules
         }
         else if (Target.Platform == UnrealTargetPlatform.VisionOS)
         {
-            platform = "visionOS-ARM64-";
+            platform = Target.Architecture == UnrealArch.IOSSimulator
+                ? "visionOS-simulator-arm64-"
+                : "visionOS-arm64-";
             libSearchPattern = "lib*.a";
         }
         else

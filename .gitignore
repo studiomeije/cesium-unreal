@@ -9,4 +9,5 @@ ThirdParty/build
 Source/ThirdParty
 node_modules
 extern/build-helper.sh
+extern/build-visionos-sim
 Documentation/Reference

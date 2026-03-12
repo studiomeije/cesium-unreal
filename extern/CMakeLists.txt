@@ -61,7 +61,11 @@ set(PRIVATE_CESIUM_SQLITE ON)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreadedDLL)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/../Source/ThirdParty)
-set(CMAKE_INSTALL_LIBDIR ${CMAKE_INSTALL_PREFIX}/lib/${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}-$<IF:$<CONFIG:Debug>,Debug,Release>)
+set(CESIUM_INSTALL_PLATFORM "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
+if (${CMAKE_SYSTEM_NAME} STREQUAL "visionOS" AND CMAKE_OSX_SYSROOT MATCHES "xrsimulator")
+    set(CESIUM_INSTALL_PLATFORM "${CMAKE_SYSTEM_NAME}-simulator-${CMAKE_SYSTEM_PROCESSOR}")
+endif()
+set(CMAKE_INSTALL_LIBDIR ${CMAKE_INSTALL_PREFIX}/lib/${CESIUM_INSTALL_PLATFORM}-$<IF:$<CONFIG:Debug>,Debug,Release>)
 
 # Always define NDEBUG, since Unreal does in debug anyway.
 # We don't want any mismatches, especially with class member ordering.
