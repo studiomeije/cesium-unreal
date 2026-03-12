@@ -53,6 +53,11 @@ public class CesiumRuntime : ModuleRules
             platform = "iOS-ARM64-";
             libSearchPattern = "lib*.a";
         }
+        else if (Target.Platform == UnrealTargetPlatform.VisionOS)
+        {
+            platform = "visionOS-ARM64-";
+            libSearchPattern = "lib*.a";
+        }
         else
         {
             throw new InvalidOperationException("Cesium for Unreal does not support this platform.");
@@ -116,9 +121,11 @@ public class CesiumRuntime : ModuleRules
             PublicDependencyModuleNames.Add("TinyXML2");
         }
 
-        // Use UE's MikkTSpace on most platforms, except Android and iOS.
+        // Use UE's MikkTSpace on most platforms, except Android, iOS, and VisionOS.
         // On those platforms, UE's isn't available, so we use our own.
-        if (Target.Platform != UnrealTargetPlatform.Android && Target.Platform != UnrealTargetPlatform.IOS)
+        if (Target.Platform != UnrealTargetPlatform.Android &&
+            Target.Platform != UnrealTargetPlatform.IOS &&
+            Target.Platform != UnrealTargetPlatform.VisionOS)
         {
             PrivateDependencyModuleNames.Add("MikkTSpace");
         }

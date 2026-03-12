@@ -1,3 +1,5 @@
 build
 build-android
+build-ios
+build-visionos
 build-trace

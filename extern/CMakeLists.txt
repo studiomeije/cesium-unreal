@@ -35,7 +35,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Android")
     set(HTTPLIB_USE_OPENSSL_IF_AVAILABLE OFF)
     set(ANDROID_ABI ${CMAKE_ANDROID_ARCH_ABI})
     set(ANDROID_NDK ${CMAKE_ANDROID_NDK})
-elseif (${CMAKE_SYSTEM_NAME} STREQUAL "iOS")
+elseif (${CMAKE_SYSTEM_NAME} STREQUAL "iOS" OR ${CMAKE_SYSTEM_NAME} STREQUAL "visionOS")
     set(CESIUM_ARCHITECTURE "arm64")
 else()
     if (CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -45,7 +45,7 @@ else()
     endif()
 endif()
 
-if (${CMAKE_SYSTEM_NAME} STREQUAL "iOS")
+if (${CMAKE_SYSTEM_NAME} STREQUAL "iOS" OR ${CMAKE_SYSTEM_NAME} STREQUAL "visionOS")
     # Fix for PThread library not in path
     set(CMAKE_THREAD_LIBS_INIT "-lpthread")
     set(CMAKE_HAVE_THREADS_LIBRARY 1)
@@ -74,7 +74,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_SYSTEM_NAME} STREQUAL "Darw
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility-ms-compat -fvisibility-inlines-hidden -fno-rtti")
 elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Android")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fvisibility-inlines-hidden -fno-rtti")
-elseif (${CMAKE_SYSTEM_NAME} STREQUAL "iOS")
+elseif (${CMAKE_SYSTEM_NAME} STREQUAL "iOS" OR ${CMAKE_SYSTEM_NAME} STREQUAL "visionOS")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden -fno-rtti")
 elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   # Unreal Engine adds /Zp8 in 64-bit Windows builds to align structs to 8 bytes instead of the
@@ -137,7 +137,7 @@ add_subdirectory(cesium-native)
 # cesium-native doesn't require this header to be public, but Cesium for Unreal wants to use it.
 #install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cesium-native/extern/stb/stb_image_resize.h TYPE INCLUDE)
 
-if (ANDROID OR IOS)
+if (ANDROID OR IOS OR CMAKE_SYSTEM_NAME STREQUAL "visionOS")
     # Unreal Engine doesn't include MikkTSpace on Android or iOS.
     # So add our own.
     add_library(MikkTSpace MikkTSpace/mikktspace.c)
